@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Jam & Anel Gazette</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --burgundy: #7C1836;
+            --dark-green: #2B4E38;
+            --warm-brown: #B89C72;
+            --paper-bg: #F5EFE6;
+            --text-dark: #333333;
+        }
+        body {
+            background-color: #E8E3DB;
+            font-family: 'Montserrat', sans-serif;
+            color: var(--text-dark);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+        .page-card {
+            background-color: var(--paper-bg);
+            width: 100%;
+            max-width: 650px;
+            box-sizing: border-box;
+            padding: 40px 35px;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            background-image: repeating-linear-gradient(transparent, transparent 23px, rgba(184, 156, 114, 0.15) 24px);
+        }
+        
+        .page-border {
+            border: 1px solid var(--warm-brown);
+            position: absolute;
+            top: 15px; left: 15px; right: 15px; bottom: 15px;
+            pointer-events: none;
+        }
+        .page-border-inner {
+            border: 1px solid var(--warm-brown);
+            position: absolute;
+            top: 22px; left: 22px; right: 22px; bottom: 22px;
+            pointer-events: none;
+        }
+        .corner {
+            position: absolute;
+            width: 25px; height: 25px;
+            border: 1px solid var(--warm-brown);
+        }
+        .corner-tl { top: 22px; left: 22px; border-right: none; border-bottom: none; border-top-left-radius: 10px; }
+        .corner-tr { top: 22px; right: 22px; border-left: none; border-bottom: none; border-top-right-radius: 10px; }
+        .corner-bl { bottom: 22px; left: 22px; border-right: none; border-top: none; border-bottom-left-radius: 10px; }
+        .corner-br { bottom: 22px; right: 22px; border-left: none; border-top: none; border-bottom-right-radius: 10px; }
+
+        .content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .masthead {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.8em;
+            color: var(--dark-green);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--warm-brown);
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+        
+        /* PAGE 1 CUSTOM HEADER STYLES */
+        .title-sans {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 3.6em;
+            color: var(--burgundy);
+            margin: 0;
+            line-height: 1;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .date-sans {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 1.1em;
+            color: var(--dark-green);
+            margin: 15px 0 25px 0;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .pill-banner {
+            background-color: var(--burgundy);
+            color: #fff;
+            padding: 12px 25px;
+            border-radius: 15px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 1.25em;
+            display: inline-block;
+            margin: 10px 0 25px 0;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transform: rotate(-2deg);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        .section-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            color: var(--dark-green);
+            font-size: 1.6em;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .time {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            color: var(--burgundy);
+            font-size: 1.4em;
+            margin: 0;
+        }
+        .event-name {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1em;
+            letter-spacing: 1px;
+            margin: 5px 0;
+            text-transform: uppercase;
+        }
+        .location {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            color: var(--dark-green);
+            font-size: 1.3em;
+            margin: 5px 0;
+        }
+        .address {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+        .note {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.8em;
+            font-style: italic;
+            color: #444;
+            margin-bottom: 30px;
+            padding: 0 15px;
+        }
+
+        .intro {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.9em;
+            line-height: 1.5;
+            margin: 10px 30px 20px 30px;
+        }
+        .photo-container {
+            border: 2px solid var(--warm-brown);
+            padding: 8px;
+            margin: 20px auto;
+            background: #fff;
+            border-radius: 10px;
+            max-width: 85%;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .photo-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 6px;
+        }
+
+        .swatch-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .swatch {
+            font-family: 'Montserrat', sans-serif;
+            padding: 8px 15px;
+            color: white;
+            font-weight: 700;
+            font-size: 0.8em;
+            border-radius: 5px;
+        }
+        .swatch-burgundy { background: #7C1836; }
+        .swatch-green { background: #2B4E38; }
+        .swatch-brown { background: #B89C72; }
+
+        .role {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--dark-green);
+            font-weight: 800;
+            font-size: 0.85em;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+        .names {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 1.05em;
+            color: var(--text-dark);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .secondary-grid {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .secondary-grid .names {
+            margin-bottom: 0;
+        }
+        .secondary-grid .role {
+            margin-bottom: 0;
+            font-size: 0.7em;
+            color: var(--warm-brown);
+        }
+        
+        .reminder {
+            margin-bottom: 25px;
+        }
+        .reminder h4 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            color: var(--burgundy);
+            font-size: 1.15em;
+            margin: 0 0 5px 0;
+        }
+        .reminder p {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.85em;
+            line-height: 1.5;
+            margin: 0;
+            padding: 0 10px;
+        }
+
+        .rsvp-box {
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid var(--warm-brown);
+            padding: 20px;
+            margin-top: 20px;
+            text-align: left;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            font-size: 1em;
+            font-family: 'Montserrat', sans-serif;
+            border: 1px solid var(--warm-brown);
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+        .attendance-options {
+            margin: 15px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .attendance-options label {
+            font-size: 0.95em;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .attendance-options input[type="radio"] {
+            accent-color: var(--burgundy);
+            transform: scale(1.2);
+        }
+        .companion-card {
+            background: #ffffff;
+            border: 1px solid #e0d8cc;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+        .companion-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.95em;
+            cursor: pointer;
+            margin-bottom: 5px;
+        }
+        .companion-item input[type="checkbox"] {
+            accent-color: var(--burgundy);
+            transform: scale(1.2);
+        }
+        .companion-comment {
+            margin-top: 8px;
+            font-size: 0.85em;
+            padding: 8px 10px !important;
+            margin-bottom: 0 !important;
+            border: 1px dashed var(--warm-brown) !important;
+            background: #fdfbf7;
+        }
+        button {
+            width: 100%;
+            background: var(--burgundy);
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 1em;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        button:hover { background: #5a0921; }
+        button:disabled { background: #888888; cursor: not-allowed; }
+        
+        .autocomplete-list {
+            border: 1px solid var(--warm-brown);
+            border-top: none;
+            background-color: #fff;
+            max-height: 180px;
+            overflow-y: auto;
+            position: absolute;
+            width: calc(100% - 42px);
+            z-index: 10;
+        }
+        .autocomplete-list div {
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 1px solid #eee;
+            font-size: 0.9em;
+        }
+        .autocomplete-list div:hover {
+            background-color: var(--paper-bg);
+        }
+        .hidden { display: none; }
+
+        .footer {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.7em;
+            font-weight: 700;
+            color: var(--dark-green);
+            letter-spacing: 1px;
+            margin-top: 20px;
+            border-top: 1px solid var(--warm-brown);
+            padding-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PAGE 1 -->
+    <div class="page-card">
+        <div class="page-border"></div>
+        <div class="page-border-inner"></div>
+        <div class="corner corner-tl"></div>
+        <div class="corner corner-tr"></div>
+        <div class="corner corner-bl"></div>
+        <div class="corner corner-br"></div>
+        
+        <div class="content">
+            <div class="masthead">THE JAM & ANEL GAZETTE</div>
+            
+            <h1 class="title-sans">JAM & ANEL</h1>
+            <div class="date-sans">MAY 21, 2027</div>
+            <div class="pill-banner">MAG-IISANG DIBDIB NA KAMI</div>
+            
+            <div class="intro">
+                Ready na kaming patunayan na may forever talaga, kaya save the date and celebrate this special day with us.
+            </div>
+            
+            <div class="photo-container">
+                <img src="image_41cac5.jpg" alt="Jam and Anel Wedding Photo">
+            </div>
+            
+            <div class="footer">MAY 21, 2027 • MAKATI TO TAGUIG • PAGE 1</div>
+        </div>
+    </div>
+
+    <!-- PAGE 2 -->
+    <div class="page-card">
+        <div class="page-border"></div>
+        <div class="page-border-inner"></div>
+        <div class="corner corner-tl"></div>
+        <div class="corner corner-tr"></div>
+        <div class="corner corner-bl"></div>
+        <div class="corner corner-br"></div>
+        
+        <div class="content">
+            <div class="masthead">THE JAM & ANEL GAZETTE</div>
+            <div class="section-title">THE CEREMONY & RECEPTION</div>
+            
+            <p class="time">12:30 PM</p>
+            <p class="event-name">THE CEREMONY</p>
+            <p class="location">Nuestra Señora de Gracia Parish</p>
+            <p class="address">GUADALUPE VIEJO, MAKATI CITY</p>
+            <p class="note">Friendly reminder: Mag-lunch muna. Ayaw naming may mahilo sa gutom habang nag-i-"I do" kami.</p>
+            
+            <p class="time">4:30 PM</p>
+            <p class="event-name">THE RECEPTION</p>
+            <p class="location">Casa Real at Acacia Estates</p>
+            <p class="address">TAGUIG CITY</p>
+            <p class="note">Travel time from the church is approximately 30 minutes to one hour, depending on traffic. Yes, Metro Manila traffic kaya plan ahead.</p>
+            
+            <div class="event-name" style="margin-top: 20px;">WHAT TO WEAR</div>
+            <p style="font-size: 0.9em; margin: 5px 0;">Modern, sleek & stylish Filipiniana & Barong</p>
+            <p style="font-size: 0.8em; margin: 0; font-style: italic;">Bring out your best Filipino look.</p>
+            
+            <div class="swatch-container">
+                <div class="swatch swatch-burgundy">BURGUNDY</div>
+                <div class="swatch swatch-green">GREEN</div>
+                <div class="swatch swatch-brown">BROWN</div>
+            </div>
+            
+            <div class="footer">MAY 21, 2027 • MAKATI TO TAGUIG • PAGE 2</div>
+        </div>
+    </div>
+
+    <!-- PAGE 3 -->
+    <div class="page-card">
+        <div class="page-border"></div>
+        <div class="page-border-inner"></div>
+        <div class="corner corner-tl"></div>
+        <div class="corner corner-tr"></div>
+        <div class="corner corner-bl"></div>
+        <div class="corner corner-br"></div>
+        
+        <div class="content">
+            <div class="masthead">THE JAM & ANEL GAZETTE</div>
+            <div class="section-title">OUR WEDDING ENTOURAGE</div>
+            
+            <div style="background-color: var(--burgundy); color: #fff; padding: 12px 25px; border-radius: 5px; font-weight: 800; font-size: 1em; display: inline-block; margin: 0 0 20px 0; letter-spacing: 1px; text-transform: uppercase;">PRINCIPAL SPONSORS</div>
+            <div class="grid-2">
+                <div>
+                    <div class="role">NINONG</div>
+                    <div class="names">
+                        Didoy Lubaton<br>Obet Cabrillas<br>Ken Mariano<br>Audee Villaraza
+                    </div>
+                </div>
+                <div>
+                    <div class="role">NINANG</div>
+                    <div class="names">
+                        Mayi Lubaton<br>Maw Capulong<br>Cathy Pingol<br>France Loyola
+                    </div>
+                </div>
+            </div>
+
+            <div style="background-color: var(--dark-green); color: #fff; padding: 12px 25px; border-radius: 5px; font-weight: 800; font-size: 1em; display: inline-block; margin: 15px 0 20px 0; letter-spacing: 1px; text-transform: uppercase;">SECONDARY SPONSORS</div>
+            <div class="secondary-grid">
+                <div class="names" style="text-align: right;">Revin Berces</div>
+                <div class="role">BEST MAN / MAID OF HONOR</div>
+                <div class="names" style="text-align: left;">Joan Cuales</div>
+
+                <div class="names" style="text-align: right;">Fort Conceja</div>
+                <div class="role">VEIL</div>
+                <div class="names" style="text-align: left;">Tin Melencio</div>
+
+                <div class="names" style="text-align: right;">Grace Cabigao</div>
+                <div class="role">CANDLE</div>
+                <div class="names" style="text-align: left;">Anna Rivera</div>
+
+                <div class="names" style="text-align: right;">Kat Pasigan</div>
+                <div class="role">CORD</div>
+                <div class="names" style="text-align: left;">Dio Centeno</div>
+            </div>
+
+            <div class="grid-2" style="margin-top: 10px;">
+                <div>
+                    <div style="background-color: var(--dark-green); color: #fff; padding: 12px 25px; border-radius: 5px; font-weight: 800; font-size: 0.95em; display: inline-block; margin-bottom: 15px; letter-spacing: 1px; text-transform: uppercase;">GROOM SQUAD</div>
+                    <div class="names">
+                        Ichee Fu<br>Tonton Mendoza<br>Bede Mendoza<br>Cristina Solis-Romero
+                    </div>
+                </div>
+                <div>
+                    <div style="background-color: var(--burgundy); color: #fff; padding: 12px 25px; border-radius: 5px; font-weight: 800; font-size: 0.95em; display: inline-block; margin-bottom: 15px; letter-spacing: 1px; text-transform: uppercase;">BRIDE SQUAD</div>
+                    <div class="names">
+                        Mariel Bobier<br>Emily Policarpio<br>Inna Gaerlan<br>Feichen Fu
+                    </div>
+                </div>
+            </div>
+            
+            <div style="background-color: var(--burgundy); color: #fff; padding: 12px 25px; border-radius: 5px; font-weight: 800; font-size: 1em; display: inline-block; margin: 15px 0 20px 0; letter-spacing: 1px; text-transform: uppercase;">OUR LITTLE ENTOURAGE</div>
+            <div class="grid-2">
+                <div>
+                    <div class="role">FLOWER GIRL</div>
+                    <div class="names">Maddie de Roxas</div>
+                    
+                    <div class="role" style="margin-top: 15px;">BIBLE BEARER</div>
+                    <div class="names">Jack Taborda</div>
+                </div>
+                <div>
+                    <div class="role">RING BEARER</div>
+                    <div class="names">Miggy Samar</div>
+                    
+                    <div class="role" style="margin-top: 15px;">ARRAS BEARER</div>
+                    <div class="names">Kamy Martirez</div>
+                </div>
+            </div>
+            
+            <div class="footer">MAY 21, 2027 • MAKATI TO TAGUIG • PAGE 3</div>
+        </div>
+    </div>
+
+    <!-- PAGE 4 -->
+    <div class="page-card">
+        <div class="page-border"></div>
+        <div class="page-border-inner"></div>
+        <div class="corner corner-tl"></div>
+        <div class="corner corner-tr"></div>
+        <div class="corner corner-bl"></div>
+        <div class="corner corner-br"></div>
+        
+        <div class="content">
+            <div class="masthead">THE JAM & ANEL GAZETTE</div>
+            <div class="section-title">FRIENDLY REMINDERS</div>
+            
+            <div class="reminder">
+                <h4>Transportation & Accommodation</h4>
+                <p>Transportation and accommodation will be under each guest's own arrangement. You may also offer a ride or arrange a carpool para makilala ang iba naming guests.</p>
+            </div>
+            
+            <div class="reminder">
+                <h4>Strictly Listed Guests Only</h4>
+                <p>We would love to celebrate with everyone, but our venue has limited seating capacity. This invitation is strictly for the guests whose names appear on our official list. Please do not bring plus-ones, uninvited guests, or children who are not included in the invitation. Love namin kayo, pero bilang lang talaga ang upuan at pagkain.</p>
+            </div>
+            
+            <div class="reminder">
+                <h4>Unplugged & Private Wedding</h4>
+                <p>We're keeping our wedding private. Pakiusap, do not share wedding details, photos, or videos outside the guest list. Please do not post on the day. We also hope you can keep your phones away and be fully present. Our photo-video team will capture the celebration for everyone.</p>
+            </div>
+            
+            <div class="reminder">
+                <h4>Gifts</h4>
+                <p>Your presence and prayers are already the best gifts we could receive. If you would still like to bless us, a cash gift for our couple start-up fund would be deeply appreciated. No bulky physical gifts na po, dahil hindi na kasya sa aming munting condo.</p>
+            </div>
+            
+            <div class="rsvp-box">
+                <h3 style="text-align: center; color: var(--burgundy); font-family: 'Montserrat', sans-serif; font-weight: 800; margin-top:0;">RSVP</h3>
+                <p style="text-align: center; font-size: 0.85em; font-weight: 700; margin-bottom: 20px;">PLEASE CONFIRM YOUR ATTENDANCE ON OR BEFORE<br>DECEMBER 15, 2026</p>
+                
+                <div id="searchSection" style="position: relative;">
+                    <input type="text" id="guestSearch" placeholder="I-type ang iyong pangalan..." autocomplete="off">
+                    <div id="autocompleteList" class="autocomplete-list"></div>
+                </div>
+
+                <div id="rsvpForm" class="hidden">
+                    <h4 id="welcomeMessage" style="color: var(--dark-green); text-align:center; margin-top:0; font-family: 'Montserrat', sans-serif; font-weight: 800;"></h4>
+                    <form id="submissionForm">
+                        
+                        <div class="attendance-options">
+                            <label>
+                                <input type="radio" name="attendingStatus" value="accept" checked onclick="toggleAttendance(true)">
+                                🎉 Joyfully Accepts (Makakadalo Kami)
+                            </label>
+                            <label>
+                                <input type="radio" name="attendingStatus" value="decline" onclick="toggleAttendance(false)">
+                                💌 Regretfully Declines (Hindi Kami Makakadalo)
+                            </label>
+                        </div>
+                        <hr style="border: 0; border-top: 1px solid var(--warm-brown); margin: 15px 0;">
+
+                        <div id="companionSection">
+                            <p style="font-size: 0.9em; font-weight:700; margin-bottom: 10px;">Sino-sino sa inyong grupo ang makakadalo?</p>
+                            <div id="companionList"></div>
+                            <br>
+                        </div>
+
+                        <div id="detailsSection">
+                            <input type="text" id="dietary" placeholder="Dietary restrictions / Allergies (Optional)">
+                        </div>
+                        <button type="submit" id="submitBtn">I-SUBMIT ANG RSVP</button>
+                    </form>
+                </div>
+
+                <div id="successMessage" class="hidden" style="text-align:center;">
+                    <h4 id="thankYouHeader" style="color: var(--dark-green); margin-top: 10px; font-family: 'Montserrat', sans-serif; font-weight: 800;">MARAMING SALAMAT!</h4>
+                    <p id="thankYouSub" style="font-size: 0.9em;">Naitala na namin ang inyong tugon.</p>
+                </div>
+            </div>
+
+            <div class="footer">MAY 21, 2027 • MAKATI TO TAGUIG • PAGE 4</div>
+        </div>
+    </div>
+
+    <script>
+        // YOUR UPDATED GOOGLE APPS SCRIPT WEB APP URL
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyT4E_fIII3TK-DX8U34j0KNlpoahvphjJNBayToaEeY1v4-l49g4DIXA5UP4lVqz0drw/exec';
+
+        const guestDatabase = [
+            // Jam's Side
+            { name: "Teresa Fu", specifiedPlusOnes: ["Yu-chi Fu", "Fei-chen Fu", "James Zhou"] },
+            { name: "Adela Pengson", specifiedPlusOnes: ["Weleng Pengson"] },
+            { name: "Aurea Martin", specifiedPlusOnes: [] },
+            { name: "Marlyn Maniego", specifiedPlusOnes: ["Noel Maniego"] },
+            { name: "Jake Maniego", specifiedPlusOnes: ["Sheena Luciano", "Kiel Maniego", "Miel Maniego", "Drake Maniego"] },
+            { name: "Joy Del Rosario", specifiedPlusOnes: ["Tep Del Rosario", "April Del Rosario", "JD Del Rosario", "David Del Rosario"] },
+            { name: "Jean Maniego", specifiedPlusOnes: ["Jay Jay Taborda", "Jack Jack Taborda"] },
+            { name: "Freddie Pengson", specifiedPlusOnes: ["Irma Torres"] },
+            { name: "Beth Marquez", specifiedPlusOnes: ["Carlo Marquez"] },
+            { name: "Roland Pengson", specifiedPlusOnes: ["Nene Velasco"] },
+            { name: "Ramil Pengson", specifiedPlusOnes: ["Emma Pengson", "Lara Pengson", "Sarah Pengson", "Euwen Pengson", "Raven Pengson", "Ashley Pengson"] },
+            { name: "Floricel Orlino", specifiedPlusOnes: ["Ed Orlino", "Akim Orlino", "Nicole Orlino", "Winwin Orlino"] },
+            { name: "Jona Cabato", specifiedPlusOnes: ["Romy Cabato", "Faith Cabato", "Reese Cabato", "Gio Cabato"] },
+            { name: "Kharen Liwanag", specifiedPlusOnes: ["Goyo Liwanag", "Ayllah Liwanag"] },
+            { name: "Marko Alejandro", specifiedPlusOnes: ["Jude Alejandro"] },
+            { name: "Kris Calagos", specifiedPlusOnes: ["Ruffa Calagos"] },
+            { name: "Gerald Alvaran", specifiedPlusOnes: ["Roxanne Natividad"] },
+            { name: "Alloiza Recto", specifiedPlusOnes: [] },
+            { name: "Michael Rosales", specifiedPlusOnes: [] },
+            { name: "Pam Genosas", specifiedPlusOnes: ["Anthony Genosas"] },
+            { name: "Joannie Obien", specifiedPlusOnes: [] },
+            { name: "Ivan Hidalgo", specifiedPlusOnes: [] },
+            { name: "Emily Policarpio", specifiedPlusOnes: [] },
+            { name: "Donna Ocampo", specifiedPlusOnes: [] },
+            { name: "Clarissa Navarro", specifiedPlusOnes: [] },
+            { name: "Bea Guevarra", specifiedPlusOnes: [] },
+            { name: "Justin Plata", specifiedPlusOnes: [] },
+            { name: "Mark Germinal", specifiedPlusOnes: [] },
+            { name: "Liz Aloro", specifiedPlusOnes: [] },
+            { name: "Ken Mariano", specifiedPlusOnes: [] },
+            { name: "Mark Dalupang", specifiedPlusOnes: [] },
+            { name: "Pau Cruz", specifiedPlusOnes: [] },
+            { name: "Mae Joyce Capulong", specifiedPlusOnes: [] },
+            { name: "Joan Cuales", specifiedPlusOnes: [] },
+            { name: "Anna Rivera", specifiedPlusOnes: [] },
+            { name: "Sean Foley", specifiedPlusOnes: [] },
+            { name: "Dio Centeno", specifiedPlusOnes: [] },
+            { name: "Tin Melencio", specifiedPlusOnes: [] },
+            { name: "Inna Gaerlan", specifiedPlusOnes: [] },
+            { name: "Ann Salonga", specifiedPlusOnes: [] },
+            { name: "Ella Edillor", specifiedPlusOnes: [] },
+            { name: "Jonnel Edillor", specifiedPlusOnes: [] },
+            { name: "Vikki Lim", specifiedPlusOnes: [] },
+            { name: "Mariel Bobier", specifiedPlusOnes: [] },
+            { name: "Joyce Lapuz", specifiedPlusOnes: [] },
+
+            // Anel's Side
+            { name: "Ton Mendoza", specifiedPlusOnes: ["Mianne Cudal"] },
+            { name: "Bede Mendoza", specifiedPlusOnes: [] },
+            { name: "Roseann Pingol-Torres", specifiedPlusOnes: [] },
+            { name: "Dr. Maria Millicent Cariño", specifiedPlusOnes: [] },
+            { name: "Catherine Salivio-Pingol", specifiedPlusOnes: ["Edgardo Pingol", "Seprah Camille Pingol"] },
+            { name: "Norverissa Pingol-Colendra", specifiedPlusOnes: [] },
+            { name: "Belinda Mendoza", specifiedPlusOnes: [] },
+            { name: "Keithryn Acosta-Samar", specifiedPlusOnes: ["Sean Samar", "Miggy Samar"] },
+            { name: "Anton Mercado", specifiedPlusOnes: [] },
+            { name: "Ezra de Leon-Mercado", specifiedPlusOnes: [] },
+            { name: "Kat Pasigan", specifiedPlusOnes: [] },
+            { name: "Grace Kamille Cabuyao", specifiedPlusOnes: [] },
+            { name: "Pauline Alyssa Bianca Cruz-Balbuena", specifiedPlusOnes: [] },
+            { name: "Ivy Marisse Medrano", specifiedPlusOnes: [] },
+            { name: "Jessica Christia Mendoza-Chu", specifiedPlusOnes: [] },
+            { name: "Jannette Murata", specifiedPlusOnes: ["Maddie de Roxas"] },
+            { name: "Jackie Salud-Balabat", specifiedPlusOnes: [] },
+            { name: "Meybel Martirez", specifiedPlusOnes: ["Kara Malaya Isabel Martirez"] },
+            { name: "Hyacinth dela Paz", specifiedPlusOnes: [] },
+            { name: "Racel Anne Otic Gundayao-Canoy", specifiedPlusOnes: [] },
+            { name: "Regina Marie Abigail Funesto Orellana", specifiedPlusOnes: [] },
+            { name: "Alyssa Rafaelle Magat-Petallo", specifiedPlusOnes: [] },
+            { name: "Revin Berces", specifiedPlusOnes: [] },
+            { name: "Dianne Perez-Berces", specifiedPlusOnes: [] },
+            { name: "James Esparas", specifiedPlusOnes: [] },
+            { name: "Fortunato Conceja", specifiedPlusOnes: [] },
+            { name: "Mark Anthony Arambulo", specifiedPlusOnes: [] },
+            { name: "Jose Antonio Garde", specifiedPlusOnes: ["Marian Manuel-Garde", "Caleb Garde"] },
+            { name: "Micah Ibanez-Celiz", specifiedPlusOnes: [] },
+            { name: "Fr. Albert Garong, SSP", specifiedPlusOnes: [] },
+            { name: "Fr. Miguel Ramirez", specifiedPlusOnes: [] },
+            { name: "Ruben Abucayon", specifiedPlusOnes: [] },
+            { name: "Didoy Lubaton", specifiedPlusOnes: ["Mayi Lubaton"] },
+            { name: "Obet Cabrillas", specifiedPlusOnes: [] },
+            { name: "France Loyola", specifiedPlusOnes: [] },
+            { name: "Audee Villaraza", specifiedPlusOnes: [] },
+            { name: "Jofre Nachor", specifiedPlusOnes: ["Marivel Nachor", "Darcy Nachor", "Pia Nachor", "Makshi Nachor"] },
+            { name: "Janea Bandong", specifiedPlusOnes: [] },
+            { name: "Kristina Ramirez", specifiedPlusOnes: [] },
+            { name: "Ma. Cristina Solis-Romero", specifiedPlusOnes: ["Michael John Solis", "Ramon Romero"] },
+            { name: "Maria Krizzia Ginelli Barja-Ancheta", specifiedPlusOnes: ["Jeff Ancheta", "Daniel Peñascosa", "Jill Christine Lamson Yang-Kibel"] },
+            { name: "Craig Dennis Garcia", specifiedPlusOnes: [] },
+            { name: "Edward Duma", specifiedPlusOnes: [] },
+            { name: "Kylie Licudine", specifiedPlusOnes: [] },
+            { name: "Nikko Tripon", specifiedPlusOnes: [] },
+            { name: "Fernando Nacpil Jr.", specifiedPlusOnes: [] },
+            { name: "John Philip Torres", specifiedPlusOnes: [] },
+            { name: "Jona Serojihos", specifiedPlusOnes: [] },
+            { name: "Catherine Pingol", specifiedPlusOnes: [] },
+            { name: "Miguel Ella", specifiedPlusOnes: [] }
+        ];
+
+        let selectedGuestData = null;
+        let selectedPerson = null;
+        const searchInput = document.getElementById('guestSearch');
+        const autocompleteList = document.getElementById('autocompleteList');
+
+        searchInput.addEventListener('input', function() {
+            const val = this.value.trim().toLowerCase();
+            autocompleteList.innerHTML = '';
+            if (!val) return false;
+
+            let searchResults = [];
+
+            guestDatabase.forEach(group => {
+                if (group.name.toLowerCase().includes(val)) {
+                    searchResults.push({
+                        displayName: group.name,
+                        targetPerson: group.name,
+                        groupData: group
+                    });
+                }
+
+                if (group.specifiedPlusOnes && group.specifiedPlusOnes.length > 0) {
+                    group.specifiedPlusOnes.forEach(pOne => {
+                        if (pOne.toLowerCase().includes(val)) {
+                            searchResults.push({
+                                displayName: `${pOne} <span style="font-size:0.8em; color:#777;">(Kasama ni ${group.name})</span>`,
+                                targetPerson: pOne,
+                                groupData: group
+                            });
+                        }
+                    });
+                }
+            });
+
+            searchResults.forEach(res => {
+                const div = document.createElement('div');
+                div.innerHTML = res.displayName;
+                div.addEventListener('click', function() {
+                    selectGuest(res.groupData, res.targetPerson);
+                    autocompleteList.innerHTML = '';
+                });
+                autocompleteList.appendChild(div);
+            });
+        });
+
+        function selectGuest(group, selectedPersonName) {
+            selectedGuestData = group;
+            selectedPerson = selectedPersonName;
+            document.getElementById('searchSection').classList.add('hidden');
+            document.getElementById('rsvpForm').classList.remove('hidden');
+            document.getElementById('welcomeMessage').innerText = `Mabuhay, ${selectedPersonName}!`;
+
+            const container = document.getElementById('companionList');
+            container.innerHTML = '';
+
+            // Card for Primary Guest
+            createPersonCard(container, group.name, group.name === selectedPersonName ? "Ikaw" : "Primary Guest");
+
+            // Card for Each Plus One
+            if (group.specifiedPlusOnes && group.specifiedPlusOnes.length > 0) {
+                group.specifiedPlusOnes.forEach(companion => {
+                    createPersonCard(container, companion, companion === selectedPersonName ? "Ikaw" : "Kasama");
+                });
+            }
+        }
+
+        function createPersonCard(container, name, labelText) {
+            const cardId = 'card_' + name.replace(/[^a-zA-Z0-9]/g, '');
+            const inputId = 'input_' + name.replace(/[^a-zA-Z0-9]/g, '');
+
+            const cardHtml = `
+                <div class="companion-card">
+                    <label class="companion-item">
+                        <input type="checkbox" class="guest-check" id="${cardId}" data-name="${name}" checked onchange="toggleCommentInput('${inputId}', this.checked)"> 
+                        <strong>${name}</strong> (${labelText})
+                    </label>
+                    <input type="text" id="${inputId}" class="companion-comment" placeholder="Mensahe / Bati ni ${name} (Optional)">
+                </div>
+            `;
+            container.innerHTML += cardHtml;
+        }
+
+        function toggleCommentInput(inputId, isChecked) {
+            const commentInput = document.getElementById(inputId);
+            if (commentInput) {
+                if (isChecked) {
+                    commentInput.style.display = 'block';
+                } else {
+                    commentInput.style.display = 'none';
+                }
+            }
+        }
+
+        function toggleAttendance(isAttending) {
+            const companionSection = document.getElementById('companionSection');
+            const detailsSection = document.getElementById('detailsSection');
+            
+            if (isAttending) {
+                companionSection.classList.remove('hidden');
+                detailsSection.classList.remove('hidden');
+            } else {
+                companionSection.classList.add('hidden');
+                detailsSection.classList.add('hidden');
+            }
+        }
+
+        document.getElementById('submissionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerText = 'IPINAPADALA...';
+
+            const isAttending = document.querySelector('input[name="attendingStatus"]:checked').value === 'accept';
+            const dietary = document.getElementById('dietary').value || '';
+            
+            let attendees = [];
+            if (isAttending) {
+                const checkedBoxes = document.querySelectorAll('.guest-check:checked');
+                checkedBoxes.forEach(box => {
+                    const personName = box.getAttribute('data-name');
+                    const inputId = 'input_' + personName.replace(/[^a-zA-Z0-9]/g, '');
+                    const commentVal = document.getElementById(inputId) ? document.getElementById(inputId).value : '';
+                    attendees.push({
+                        name: personName,
+                        comment: commentVal
+                    });
+                });
+            }
+
+            const payload = {
+                primaryGuest: selectedGuestData ? selectedGuestData.name : selectedPerson,
+                status: isAttending ? 'Joyfully Accepts (Makakadalo)' : 'Regretfully Declines (Hindi Makakadalo)',
+                attendees: attendees,
+                dietary: dietary
+            };
+
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            }).then(() => {
+                showSuccess(isAttending);
+            }).catch(err => {
+                console.error('Error submitting RSVP:', err);
+                showSuccess(isAttending);
+            });
+        });
+
+        function showSuccess(isAttending) {
+            document.getElementById('rsvpForm').classList.add('hidden');
+            document.getElementById('successMessage').classList.remove('hidden');
+
+            if (!isAttending) {
+                document.getElementById('thankYouHeader').innerText = "MARAMING SALAMAT SA TUGON!";
+                document.getElementById('thankYouSub').innerText = "Nalulungkot kami na hindi kayo makakadalo, ngunit nagpapasalamat kami sa inyong pagbati!";
+            }
+        }
+    </script>
+</body>
+</html>
